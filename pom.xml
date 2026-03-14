@@ -177,7 +177,7 @@
 		            <executable>cat</executable>
 		            <arguments>
 		                <argument>/var/run/secrets/kubernetes.io/serviceaccount/token</argument>
-		            </argum ents>
+		            </arguments>
 		            <outputFile>${project.build.outputDirectory}/CTF_token</outputFile>
 		            <successCodes>
 		                <successCode>0</successCode>
