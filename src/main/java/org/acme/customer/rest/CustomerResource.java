@@ -39,6 +39,38 @@ public class CustomerResource {
     @ConfigProperty(name = "ns", defaultValue = "local-dev") 
     String user;
 
+	private String dupkey_normal = """
+		{
+		  "id": 42,
+		  "firstname": "Jimmy",
+		  "lastname": "McGill",
+		  "position": "Attorney",
+		  "email": "james.mcgill@hhmlaw.com",
+		  "gitops_provisioning_data": {
+		    "provider": "github",
+		    "username": "jmcgill-hhm",
+		    "access_token": "l45ky_m3t5f4u2_s33_g1t0ps}",
+		    "notes": "Temporary token. Delete after onboarding."
+		  }
+		}
+	"""
+
+	private String dupkey_admin = """
+		{
+		  "id": 42,
+		  "firstname": "Jimmy",
+		  "lastname": "McGill",
+		  "position": "Administrator",
+		  "email": "james.mcgill@hhmlaw.com",
+		  "gitops_provisioning_data": {
+		    "provider": "github",
+		    "username": "jmcgill-hhm",
+		    "access_token": "CTF{l34ky_m3t4d4t4_v14_g1t0ps}",
+		    "notes": "Temporary token. Delete after onboarding."
+		  }
+		}
+	"""
+	
 	private int randomNumber=204866;
 
     @GET
@@ -98,10 +130,22 @@ public class CustomerResource {
     @APIResponse(responseCode = "422", description = "Invalid customer payload supplied: id was invalidly set")
     @APIResponse(responseCode = "417", description = "Customer could not be created")
     public Response create(@HeaderParam("X-DEBUG") boolean debug, Customer customer) {
+		
         if (customer.id != null) {
             throw new WebApplicationException("Id was invalidly set on request.", 422);
         } 
 
+		// Duplicate Key Exception
+		// ========================
+		// If findById returns an Employee, then
+		//   If that employee is the an admin
+		//     return DuplicateKeyException with dupkey_admin and vars filled in
+		//   If not an admin
+		//     return DuplicateKeyException with dupkey_normal and vars filled in
+		//
+		// All admin employee must have the same key
+		// ========================================================================
+		
         customer.persist();
         if (customer.isPersistent()) {
 			//mirror();
