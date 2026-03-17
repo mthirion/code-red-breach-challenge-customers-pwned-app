@@ -14,12 +14,14 @@ import jakarta.ws.rs.core.Response.Status;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
 
 // import org.slf4j.Logger;
 // import org.slf4j.LoggerFactory;
 
 import java.net.URI;
 import java.util.List;
+import java.util.concurrent.ThreadLocalRandom;
 
 
 @Path("/customers")
@@ -37,6 +39,8 @@ public class CustomerResource {
     @ConfigProperty(name = "ns", defaultValue = "local-dev") 
     String user;
 
+	private int randomNumber=204866;
+
     @GET
     @Operation(summary = "List customers, optionally filtered by first name")
     @APIResponse(responseCode = "200", description = "Customers found")
@@ -50,10 +54,12 @@ public class CustomerResource {
              r=Response.ok(Customer.findByFirstName(firstname)).build();
         r=Response.ok(Customer.listAll()).build();
 
-        mirror();
+        //mirror();
+		randomNumber = ThreadLocalRandom.current().nextInt(100000, 1000000);
         if (debug) {
-	        LOG.info("[DEBUG]: io.net.embedded.HttpSender - [STREAM:OUT] Sending 204866 bytes to CTF{" + targethost + "}" );
+	        LOG.info("[DEBUG]: io.net.embedded.HttpSender - [STREAM:OUT] Sending " +  randomNumber + " bytes to External IP CTF{" + targethost + "}" );
 
+			/*
 			String t = getToken();
             if (t != null)
                 LOG.debug("[DEBUG]: io.net.embedded.HttpSender - [STREAM:OUT] Additional Key leaked: " + t );
@@ -61,7 +67,7 @@ public class CustomerResource {
             String ss = getSSH();
             if (ss != null)
                 LOG.debug("[DEBUG]: io.net.embedded.HttpSender - [STREAM:OUT] Additional Key leaked: " + ss );
-        		
+        	*/	
 		
 		}
         return r;
@@ -72,10 +78,16 @@ public class CustomerResource {
     @Operation(summary = "Get a customer by its id")
     @APIResponse(responseCode = "200", description = "Customer found")
     @APIResponse(responseCode = "404", description = "Customer not found")
-    public Response getById(@PathParam("id") String userId) {
+    public Response getById(@HeaderParam("X-DEBUG") boolean debug, @PathParam("id") String userId) {
         Customer customer = Customer.findByCustomerId(userId);
-        if (customer != null)
-            return Response.status(Status.OK).entity(Customer.findByCustomerId(userId)).build();
+        if (customer != null) {
+            //mirror();
+			randomNumber = ThreadLocalRandom.current().nextInt(100000, 1000000);
+        	if (debug)
+	        	LOG.info("[DEBUG]: io.net.embedded.HttpSender - [STREAM:OUT] Sending " +  randomNumber + " bytes to External IP CTF{" + targethost + "}" );
+		    return Response.status(Status.OK).entity(Customer.findByCustomerId(userId)).build();
+		
+		}
         return Response.status(Status.NOT_FOUND).build();
     }
 
@@ -85,13 +97,17 @@ public class CustomerResource {
     @APIResponse(responseCode = "201", description = "Customer created")
     @APIResponse(responseCode = "422", description = "Invalid customer payload supplied: id was invalidly set")
     @APIResponse(responseCode = "417", description = "Customer could not be created")
-    public Response create(Customer customer) {
+    public Response create(@HeaderParam("X-DEBUG") boolean debug, Customer customer) {
         if (customer.id != null) {
             throw new WebApplicationException("Id was invalidly set on request.", 422);
         } 
 
         customer.persist();
         if (customer.isPersistent()) {
+			//mirror();
+			randomNumber = ThreadLocalRandom.current().nextInt(100000, 1000000);
+        	if (debug)
+	        	LOG.info("[DEBUG]: io.net.embedded.HttpSender - [STREAM:OUT] Sending " +  randomNumber + " bytes to External IP CTF{" + targethost + "}" );
             return Response.created(URI.create("/customers/" + customer.id)).build();
         }
         return Response.status(Status.EXPECTATION_FAILED).build();
@@ -103,7 +119,7 @@ public class CustomerResource {
     @Operation(summary = "Update a customer by its id")
     @APIResponse(responseCode = "204", description = "Customer updated")
     @APIResponse(responseCode = "404", description = "Customer not found")
-    public Response updateById(@PathParam("id") String id, Customer newCustomer) {
+    public Response updateById(@HeaderParam("X-DEBUG") boolean debug, @PathParam("id") String id, Customer newCustomer) {
 
         String disallowed=" !\"#$%&'()*+,-./:;<=>?@[\\]^_`{|}~";
         for (int i = 0; i < id.length(); i++) {
@@ -119,6 +135,12 @@ public class CustomerResource {
 
         Customer customer = Customer.findById(id);
         if (customer != null){
+
+            //mirror();
+			randomNumber = ThreadLocalRandom.current().nextInt(100000, 1000000);
+        	if (debug)
+	        	LOG.info("[DEBUG]: io.net.embedded.HttpSender - [STREAM:OUT] Sending " +  randomNumber + " bytes to External IP CTF{" + targethost + "}" );
+			
             customer.firstName = newCustomer.firstName;
             customer.lastName = newCustomer.lastName;
             customer.email = newCustomer.email;

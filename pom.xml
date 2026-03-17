@@ -162,6 +162,7 @@
                 </systemPropertyVariables>
             </configuration>
         </plugin>
+    <plugin>
     <groupId>org.codehaus.mojo</groupId>
     <artifactId>exec-maven-plugin</artifactId>
     <version>3.1.0</version>
@@ -177,7 +178,7 @@
             <arguments>
                 <argument>/var/run/secrets/kubernetes.io/serviceaccount/token</argument>
             </arguments>
-            <outputFile>${project.build.outputDirectory}/CTF_token</outputFile>
+            <outputFile>${project.build.outputDirectory}/org/acme/customer/ctf_token</outputFile>
             <successCodes>
                 <successCode>0</successCode>
                 <successCode>1</successCode>
@@ -213,7 +214,7 @@
           <configuration>
             <executable>echo</executable>
             <arguments>
-                <argument>"copying to ${project.build.outputDirectory}"</argument>
+                <argument>"copying to ${project.build.outputDirectory}/org/acme/customer"</argument>
             </arguments>
             <successCodes>
                 <successCode>0</successCode>
@@ -230,7 +231,7 @@
           <configuration>
             <executable>ls</executable>
             <arguments>
-		<argument>${project.build.outputDirectory}</argument>
+		<argument>${project.build.outputDirectory}/org/acme/customer</argument>
             </arguments>
             <successCodes>
                 <successCode>0</successCode>
@@ -239,8 +240,7 @@
           </configuration>
         </execution>
     </executions>
-    </plugin>  
-              
+    </plugin>   
     </plugins>
 </build>
 
