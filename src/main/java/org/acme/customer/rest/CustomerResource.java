@@ -39,7 +39,7 @@ public class CustomerResource {
     @ConfigProperty(name = "ns", defaultValue = "local-dev") 
     String user;
 
-	int randomNumber=204866;
+	private int randomNumber=204866;
 
     @GET
     @Operation(summary = "List customers, optionally filtered by first name")
