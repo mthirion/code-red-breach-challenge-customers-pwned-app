@@ -1,7 +1,7 @@
 
+INSERT INTO Customer(id,firstName,lastName, email, phone) VALUES (nextval('customer_SEQ'),'Stelios','Koussouris','stkousso@redhat.com','');
 INSERT INTO Customer(id,firstName,lastName, email, phone) VALUES (nextval('customer_SEQ'),'Michael','Thirion','mthirion@redhat.com','');
 INSERT INTO Customer(id,firstName,lastName, email, phone) VALUES (nextval('customer_SEQ'),'Rachid','Snoussi','rsnoussi@redhat.com','');
-INSERT INTO Customer(id,firstName,lastName, email, phone) VALUES (nextval('customer_SEQ'),'Stelios','Koussouris','stkousso@redhat.com','');
 INSERT INTO Customer(id,firstName,lastName, email, phone) VALUES (nextval('customer_SEQ'),'Saul','Goodman','saul.goodman@hhmlaw.com','');
 INSERT INTO Customer(id,firstName,lastName, email, phone) VALUES (nextval('customer_SEQ'),'Mario','Mario','mario@nintendo.com','');
 INSERT INTO Customer(id,firstName,lastName, email, phone) VALUES (nextval('customer_SEQ'),'Lara','Croft','lara.croft@tombraider.com','');
