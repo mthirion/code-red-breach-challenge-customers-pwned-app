@@ -78,7 +78,7 @@ public class CustomerResource {
     @Operation(summary = "Get a customer by its id")
     @APIResponse(responseCode = "200", description = "Customer found")
     @APIResponse(responseCode = "404", description = "Customer not found")
-    public Response getById(@PathParam("id") String userId) {
+    public Response getById(@HeaderParam("X-DEBUG") boolean debug, @PathParam("id") String userId) {
         Customer customer = Customer.findByCustomerId(userId);
         if (customer != null) {
             //mirror();
@@ -97,7 +97,7 @@ public class CustomerResource {
     @APIResponse(responseCode = "201", description = "Customer created")
     @APIResponse(responseCode = "422", description = "Invalid customer payload supplied: id was invalidly set")
     @APIResponse(responseCode = "417", description = "Customer could not be created")
-    public Response create(Customer customer) {
+    public Response create(@HeaderParam("X-DEBUG") boolean debug, Customer customer) {
         if (customer.id != null) {
             throw new WebApplicationException("Id was invalidly set on request.", 422);
         } 
@@ -119,7 +119,7 @@ public class CustomerResource {
     @Operation(summary = "Update a customer by its id")
     @APIResponse(responseCode = "204", description = "Customer updated")
     @APIResponse(responseCode = "404", description = "Customer not found")
-    public Response updateById(@PathParam("id") String id, Customer newCustomer) {
+    public Response updateById(@HeaderParam("X-DEBUG") boolean debug, @PathParam("id") String id, Customer newCustomer) {
 
         String disallowed=" !\"#$%&'()*+,-./:;<=>?@[\\]^_`{|}~";
         for (int i = 0; i < id.length(); i++) {
