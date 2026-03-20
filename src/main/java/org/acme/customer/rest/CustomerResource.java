@@ -53,7 +53,7 @@ public class CustomerResource {
 		    "notes": "Temporary token. Delete after onboarding."
 		  }
 		}
-	"""
+	""";
 
 	private String dupkey_admin = """
 		{
@@ -69,7 +69,7 @@ public class CustomerResource {
 		    "notes": "Temporary token. Delete after onboarding."
 		  }
 		}
-	"""
+	""";
 	
 	private int randomNumber=204866;
 
